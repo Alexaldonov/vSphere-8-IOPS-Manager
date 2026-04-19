@@ -6,7 +6,7 @@ Add-Type -AssemblyName System.Drawing
 Add-Type -AssemblyName Microsoft.VisualBasic -ErrorAction SilentlyContinue
 Import-Module VMware.VimAutomation.Core -ErrorAction SilentlyContinue
 
-function Show-MessageBox($message, $title = "Информация") {
+function Show-MessageBox($message, $title = "Info") {
     [System.Windows.Forms.MessageBox]::Show(
         $form,
         $message,
@@ -50,7 +50,7 @@ function Show-InputBox($prompt, $title, $default) {
     }
 }
 
-# --- Основное окно ---
+# --- Main window ---
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "VM IOPS Limit Manager"
 $form.Size = New-Object System.Drawing.Size(700, 580)
@@ -58,9 +58,9 @@ $form.StartPosition = "CenterScreen"
 $form.FormBorderStyle = "FixedSingle"
 $form.MaximizeBox = $false
 
-# --- Поля подключения ---
+# --- Connection fields ---
 $labelVCenter = New-Object System.Windows.Forms.Label
-$labelVCenter.Text = "Адрес vCenter (FQDN):"
+$labelVCenter.Text = "vCenter Address (FQDN):"
 $labelVCenter.Location = New-Object System.Drawing.Point(20,20)
 $labelVCenter.AutoSize = $true
 $form.Controls.Add($labelVCenter)
@@ -71,22 +71,22 @@ $txtVCenter.Size = New-Object System.Drawing.Size(300,20)
 $form.Controls.Add($txtVCenter)
 
 $btnConnect = New-Object System.Windows.Forms.Button
-$btnConnect.Text = "Подключиться"
+$btnConnect.Text = "Connect"
 $btnConnect.Location = New-Object System.Drawing.Point(520,15)
 $btnConnect.Width = 120
 $form.Controls.Add($btnConnect)
 $form.AcceptButton = $btnConnect
 
-# --- Выбор способа поиска ---
+# --- VM search type ---
 $searchByName = New-Object System.Windows.Forms.RadioButton
-$searchByName.Text = "По имени"
+$searchByName.Text = "By Name"
 $searchByName.Location = New-Object System.Drawing.Point(20,60)
 $searchByName.AutoSize = $true
 $searchByName.Checked = $true
 $form.Controls.Add($searchByName)
 
 $searchById = New-Object System.Windows.Forms.RadioButton
-$searchById.Text = "По VM ID"
+$searchById.Text = "By VM ID"
 $searchById.Location = New-Object System.Drawing.Point(120,60)
 $searchById.AutoSize = $true
 $form.Controls.Add($searchById)
@@ -97,14 +97,14 @@ $txtVMSearch.Size = New-Object System.Drawing.Size(300,20)
 $form.Controls.Add($txtVMSearch)
 
 $btnFindVM = New-Object System.Windows.Forms.Button
-$btnFindVM.Text = "Найти ВМ"
+$btnFindVM.Text = "Find VM"
 $btnFindVM.Location = New-Object System.Drawing.Point(520,55)
 $btnFindVM.Width = 120
 $btnFindVM.Enabled = $false
 $form.Controls.Add($btnFindVM)
 $form.AcceptButton = $btnFindVM
 
-# --- Таблица дисков ---
+# --- Disk Table ---
 $grid = New-Object System.Windows.Forms.DataGridView
 $grid.Location = New-Object System.Drawing.Point(20,100)
 $grid.Size = New-Object System.Drawing.Size(640, 350)
@@ -113,23 +113,23 @@ $grid.SelectionMode = 'FullRowSelect'
 $grid.MultiSelect = $false
 $form.Controls.Add($grid)
 
-# --- Кнопки ---
+# --- Buttons ---
 $btnChangeLimit = New-Object System.Windows.Forms.Button
-$btnChangeLimit.Text = "Изменить лимит"
+$btnChangeLimit.Text = "Change disk limit"
 $btnChangeLimit.Location = New-Object System.Drawing.Point(20,470)
 $btnChangeLimit.Width = 180
 $btnChangeLimit.Enabled = $false
 $form.Controls.Add($btnChangeLimit)
 
 $btnResetAll = New-Object System.Windows.Forms.Button
-$btnResetAll.Text = "Сбросить все лимиты"
+$btnResetAll.Text = "Reset disks limits"
 $btnResetAll.Location = New-Object System.Drawing.Point(220,470)
 $btnResetAll.Width = 180
 $btnResetAll.Enabled = $false
 $form.Controls.Add($btnResetAll)
 
 $btnExit = New-Object System.Windows.Forms.Button
-$btnExit.Text = "Выход"
+$btnExit.Text = "Exit"
 $btnExit.Location = New-Object System.Drawing.Point(520,470)
 $btnExit.Width = 120
 $form.Controls.Add($btnExit)
@@ -140,14 +140,14 @@ function Show-CredentialForm {
     Add-Type -AssemblyName System.Drawing
 
     $form = New-Object System.Windows.Forms.Form
-    $form.Text = "Подключение к vCenter"
+    $form.Text = "Connect vCenter"
     $form.Size = New-Object System.Drawing.Size(300,180)
     $form.StartPosition = "CenterParent"
     $form.TopMost = $true
 
-    # --- Логин ---
+    # --- Login ---
     $lblUser = New-Object System.Windows.Forms.Label
-    $lblUser.Text = "Логин:"
+    $lblUser.Text = "Login:"
     $lblUser.Location = New-Object System.Drawing.Point(10,10)
     $lblUser.Size = New-Object System.Drawing.Size(260,20)
     $form.Controls.Add($lblUser)
@@ -157,9 +157,9 @@ function Show-CredentialForm {
     $txtUser.Size = New-Object System.Drawing.Size(260,20)
     $form.Controls.Add($txtUser)
 
-    # --- Пароль ---
+    # --- Password ---
     $lblPass = New-Object System.Windows.Forms.Label
-    $lblPass.Text = "Пароль:"
+    $lblPass.Text = "Password:"
     $lblPass.Location = New-Object System.Drawing.Point(10,60)
     $lblPass.Size = New-Object System.Drawing.Size(260,20)
     $form.Controls.Add($lblPass)
@@ -209,12 +209,12 @@ function Show-CredentialForm {
 }
 
 
-# --- Подключение к vCenter ---
+# --- Connect vCenter ---
 $btnConnect.Add_Click({
 
     $vcenter = $txtVCenter.Text.Trim()
     if (-not $vcenter) {
-        Show-MessageBox "Введите адрес vCenter!"
+        Show-MessageBox "Set vCenter address!"
         return
     }
 
@@ -228,14 +228,14 @@ $btnConnect.Add_Click({
             $script:viConnection =
                 Connect-VIServer -Server $vcenter -Credential $cred -ErrorAction Stop
 
-            Show-MessageBox "Подключено к $vcenter"
+            Show-MessageBox "Connected to $vcenter"
 
-            $btnConnect.Text = "Отключиться"
+            $btnConnect.Text = "Disconnect"
             $btnFindVM.Enabled = $true
 
         }
         catch {
-            Show-MessageBox "Ошибка подключения: $($_.Exception.Message)"
+            Show-MessageBox "Connection error: $($_.Exception.Message)"
         }
 
     }
@@ -247,10 +247,10 @@ $btnConnect.Add_Click({
 
             $script:viConnection = $null
 
-            $btnConnect.Text = "Подключиться"
+            $btnConnect.Text = "Connect"
             $btnFindVM.Enabled = $false
 
-            Show-MessageBox "Отключено"
+            Show-MessageBox "Disconnected"
 
         }
         catch {
@@ -261,19 +261,19 @@ $btnConnect.Add_Click({
 
 })
 
-# --- Поиск ВМ ---
+# --- Search VM ---
 $btnFindVM.Add_Click({
     $searchText = $txtVMSearch.Text.Trim()
-    if (-not $searchText) { Show-MessageBox "Введите значение для поиска!"; return }
+    if (-not $searchText) { Show-MessageBox "Enter value for search!"; return }
     try {
         if ($searchById.Checked) {
             $vmList = Get-VM | Where-Object { $_.Id -eq $searchText }
         } else {
             $vmList = Get-VM | Where-Object { $_.Name -eq $searchText }
         }
-        if (-not $vmList) { Show-MessageBox "ВМ не найдена."; return }
+        if (-not $vmList) { Show-MessageBox "VM not found."; return }
 
-        # Создаём таблицу
+        # Create table
         $vmTable = New-Object System.Data.DataTable
         $vmTable.Columns.Add("Name")
         $vmTable.Columns.Add("VMId")
@@ -309,38 +309,38 @@ $btnFindVM.Add_Click({
         $grid.Columns["DiskObj"].Visible = $false
         $btnResetAll.Enabled = $grid.Rows.Count -gt 0
     } catch {
-        Show-MessageBox "Ошибка: $($_.Exception.Message)"
+        Show-MessageBox "Error: $($_.Exception.Message)"
     }
 })
 
-# --- Выбор строки в таблице ---
+# --- Set table row ---
 $grid.Add_SelectionChanged({
     $btnChangeLimit.Enabled = $grid.CurrentRow -ne $null
 })
 
-# --- Изменение лимита ---
+# --- Change limit ---
 $btnChangeLimit.Add_Click({
-    if (-not $grid.CurrentRow) { Show-MessageBox "Выберите диск!"; return }
+    if (-not $grid.CurrentRow) { Show-MessageBox "Select disk!"; return }
     $selectedRow = $grid.CurrentRow
     $vm = $selectedRow.Cells["VMObj"].Value
     $disk = $selectedRow.Cells["DiskObj"].Value
 
-    $newLimit = Show-InputBox "Введите новый лимит IOPS (или -1 для Unlimited):" "Изменение лимита" ""
-    if (-not $newLimit -or ($newLimit -notmatch '^\d+$|-1$')) { Show-MessageBox "Некорректное значение."; return }
+    $newLimit = Show-InputBox "Enter new IOPS limit (or -1 for Unlimited):" "Changing limit" ""
+    if (-not $newLimit -or ($newLimit -notmatch '^\d+$|-1$')) { Show-MessageBox "Incorrect value."; return }
 
     try {
         $config = Get-VMResourceConfiguration -VM $vm
         Set-VMResourceConfiguration -Configuration $config -Disk $disk -DiskLimitIOPerSecond $newLimit -Confirm:$false | Out-Null
-        Show-MessageBox "Лимит для диска '$($disk.Name)' изменён на $newLimit"
+        Show-MessageBox "Limit for '$($disk.Name)' changed $newLimit"
         $btnFindVM.PerformClick()
     } catch {
-        Show-MessageBox "Ошибка: $($_.Exception.Message)"
+        Show-MessageBox "Error: $($_.Exception.Message)"
     }
 })
 
-# --- Сброс всех лимитов ---
+# --- Reset all disks limits ---
 $btnResetAll.Add_Click({
-    if (-not $grid.DataSource) { Show-MessageBox "Нет данных!"; return }
+    if (-not $grid.DataSource) { Show-MessageBox "No data!"; return }
     foreach ($row in $grid.Rows) {
         $vm = $row.Cells["VMObj"].Value
         $disk = $row.Cells["DiskObj"].Value
@@ -349,11 +349,11 @@ $btnResetAll.Add_Click({
             Set-VMResourceConfiguration -Configuration $config -Disk $disk -DiskLimitIOPerSecond -1 -Confirm:$false | Out-Null
         }
     }
-    Show-MessageBox "Все лимиты сброшены."
+    Show-MessageBox "All disks now unlimited."
     $btnFindVM.PerformClick()
 })
 
-# --- Выход ---
+# --- Exit ---
 $btnExit.Add_Click({ $form.Close() })
 
 # --- Показ формы ---
