@@ -1,5 +1,5 @@
 # vSphere-8-IOPS-Manager
-This utility was written primarily for my own needs, because starting with vSphere 8, VMware removed the ability to manage VM disk IOPS from the vCenter GUI, while the company I work for actively uses a mechanism for allocating IOPS on the storage system depending on the class and size of the target VM's disk.
+This utility was written primarily for my own needs, because starting with vSphere 8 VMware removed the ability to manage VM disk IOPS from the vCenter GUI, while the company I work for actively uses a mechanism for allocating IOPS on the storage system depending on the class and size of the target VM's disk.
 
 # Requirements:
 The utility requires PowerCLI (https://developer.broadcom.com/powercli) and PowerShell 7 to be installed.
