@@ -8,3 +8,8 @@ Tested on VCF PowerCLI 9.0.0 and PowerShell 7.5.4, but it should also work with 
 VCF PowerCLI 9.0.0 only works with PowerShell 7! (see PowerCLI documentation)
 
 The executable .exe was built using Microsoft .NET SDK 9, so you can rebuild it yourself using the source script IOPSManager.ps1
+
+# Usage:
+Connect to vCenter using your credentials.
+Find VM by it's name or ID. I reccomend use ID, because different VM's in different pools/folders may have same name. So pay attention to "ResourcePool" column in disks table.
+Select disk in the table and change limit with "Change disk limit" or use "Reset disks limits" to set all disks in table to "Unlimited".
