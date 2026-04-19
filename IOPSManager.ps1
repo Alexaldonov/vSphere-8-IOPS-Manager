@@ -356,5 +356,5 @@ $btnResetAll.Add_Click({
 # --- Exit ---
 $btnExit.Add_Click({ $form.Close() })
 
-# --- Показ формы ---
+# --- Form show ---
 [void]$form.ShowDialog()
